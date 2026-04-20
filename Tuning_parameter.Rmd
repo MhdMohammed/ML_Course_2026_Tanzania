@@ -1,0 +1,198 @@
+---
+title: "Tuning of Parameters and Avoiding over fitting"
+output: html_document
+date: "2026-04-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Model tuning and avoiding overfitting
+
+Overfitting occurs when a machine learning model learns the training data too well, including noise and irrelevant patterns, leading to poor performance on new, unseen data. Avoiding overfitting is essential to build models that generalize well and make accurate predictions in real‑world scenarios.
+
+![Underfitting vs Generalization vs overfitting](image_overfitting.webp)
+
+
+*For example:* Think of overfitting like a student who memorizes answers instead of understanding concepts. 
+The student may score well on familiar questions but fails when a new question appears. 
+Similarly, an overfitted model struggles with unseen data.
+
+### Problems Caused by Overfitting
+Overfitting reduces the reliability and practical usefulness of a machine learning model. When a model learns noise instead of true patterns, its real world performance suffers.
+
+  - *Poor generalization to new data*: The model performs well on training data but fails when tested on unseen data.
+  - *Reduced predictive accuracy*: Predictions become less accurate outside the training dataset.
+  - *High sensitivity to noise*: Even small changes in input data can cause large changes in predictions.
+  - *Memorization instead of learning*: The model remembers specific training examples instead of understanding general patterns.
+  - *Increased model complexity*: The model becomes harder to understand, maintain and improve.
+  
+###Causes of Overfitting
+Overfitting happens when a model becomes too focused on the training data instead of learning general patterns. This usually occurs due to issues related to model design and data quality.
+
+  - *Model is too complex*: A model with too many parameters can easily fit noise along with real patterns.
+  - *Training data is too small*: With limited data, the model may memorize examples instead of learning general rules.
+  - *Noisy data or outliers*: If the dataset contains errors or unusual values, the model may try to learn them as real patterns.
+  - *No regularization*: Without regularization, there is nothing to control model complexity.
+  - *Irrelevant features*: Including unnecessary features increases complexity and makes overfitting more likely.
+
+### How to Prevent Overfitting
+To prevent overfitting, the main objective is to make the model generalize well to new data instead of memorizing the training set. 
+This can be achieved by controlling model complexity and improving data usage.
+
+  - *Cross Validation*: Instead of evaluating the model on just one split of data, cross validation tests it on multiple splits. This gives a more reliable estimate of performance.
+
+  - *Proper Data Splitting*: Divide the dataset into training, validation, and testing sets. The model learns from the training set, tuning happens on the validation set and final evaluation is done on the test set to check real-world performance.
+
+  - *Regularization (L1 / L2)*: Regularization adds a penalty to the model’s loss function. This discourages overly large coefficients and prevents the model from becoming too complex. L1 can remove less important features, while L2 reduces their influence.
+
+  - *Reduce Model Complexity*: Choosing a simpler model with fewer parameters reduces the chance of fitting noise. Complex models are useful but more likely to overfit small datasets.
+
+  - *Feature Selection*: Removing irrelevant or redundant features helps the model focus only on meaningful information. Too many unnecessary features increase complexity and variance.
+
+  - *Ensemble Methods*: Techniques like Random Forest combine multiple models to reduce variance. By averaging predictions, ensembles make the final model more stable and less sensitive to noise.
+  
+## Bias-Variance Tradeoff 
+The prediction error for any machine learning model can be decomposed into 3 components: **bias**, **variance**, and **irreducible error**. 
+
+> Total error = Variance + Bias squared + Irreducible Error
+
+In mathematical terms:
+
+$$
+\mbox{E}[y_0 - \hat f(x_0)]^2 = Var(\hat f(x_0)) + [Bias(\hat f(x_0))]^2 + Var(\epsilon).
+$$
+
+*Irreducible error* is a measure for the noise in our data and can't be reduced by a better model - no matter how good we make our model, our data will have a certain amount of noise or error that cannot be removed. 
+We can, however, create a model with low bias and variance. These quantities are not independent, and decreasing one will increase the other - this is where the term "bias-variance tradeoff" comes from; we want to build a model with the least amount of bias and variance, keeping in mind that we need to find a balance point for these two values.
+
+But what exactly are bias and variance?
+
+* `Bias`: the error that is introduced by approximating a real-life problem, which may be extremely complicated, by a much simpler model. 
+For example, linear regression assumes that there is a linear relationship between $Y$ and $X_1, X_2,...,X_p$. It is unlikely that any real-life problem truly has such a simple linear relationship, and so performing linear regression will undoubtedly result in some bias in the estimate of $f$ (our machine learning model). 
+In other words, building a model that is too simple for the task at hand will result in high bias, whereas a more flexible (complex) model will decrease bias. 
+
+* `Variance`: the amount by which $\hat f$ would change if we estimated it using a different training data set. Since the training data are used to fit the machine learning method, different training data sets will result in a different $\hat f$. But ideally the estimate for $f$ should not vary too much between training sets. However, if a method has high variance then small changes in the training data can result in large changes in $\hat f$. 
+In general, more flexible statistical methods have higher variance.
+
+
+![](bias-var-graphs.png)
+
+
+
+
+![](bias-var-targets.png)
+
+As a general rule, as we use more flexible methods, the variance will increase and the bias will decrease. As we increase the flexibility of a class of methods, the bias tends to initially decrease faster than the variance increases. Consequently, the expected test set error declines. However, at some point increasing flexibility has little impact on the bias but starts to significantly increase the variance.
+
+Good test set performance of a statistical learning method requires low variance as well as low squared bias. This is referred to as a trade-off because it is easy to obtain a method with extremely low bias but high variance (for instance, by drawing a curve that passes through every single training observation) or a method with very low variance but high bias (by fitting a horizontal line to the data that does not follow a linear pattern). The challenge lies in finding a method for which both the variance and the squared bias are low.
+
+
+### What is Model Tuning?
+*Model tuning* is the process of optimizing a machine learning model’s performance by adjusting its parameters and configuration in the model.
+
+Think of it like fine-tuning a musical instrument — you make small adjustments until you get the best possible sound.
+
+In machine learning (ML), we adjust various “knobs and dials” to help our model make the most accurate predictions possible.
+
+### Key Components of Model Tuning:
+
+*Hyperparameters*: These are the settings configure before training begins, such as
+  - Learning rate (how fast the model learns)
+  - Number of layers in a neural
+  - Regularization strength
+  - Batch size for training
+  - Number of $k$ values in training a KNN model
+  
+*Feature Engineering*: Selecting and transforming the input data to help the model learn better patterns.
+
+*Architecture Selection*: Choosing the right type of model for specific problem in ML
+
+## Example: Tuning an Optimal Parameter (`cp`)
+We will use the `caret` package to find the optimal $cp$ (Complexity Parameter) for a decision tree using the built-in *iris dataset*.
+
+
+```{r}
+# Load libraries
+library(caret)
+library(rpart)
+library(rpart.plot)
+
+```
+
+
+### Setup and Data Generation
+We’ll create a non-linear dataset with some added "noise" to tempt the model into overfitting
+
+```{r}
+
+# Create synthetic data
+set.seed(477)
+x <- seq(1, 100, by = 1)
+y <- sin(x/5) + rnorm(100, sd = 0.3) # Sine wave + random noise
+df <- data.frame(x = x, y = y)
+
+# Split into Training (80%) and Testing (20%)
+train_idx <- sample(1:100, 80)
+train_df <- df[train_idx, ]
+test_df  <- df[-train_idx, ]
+```
+
+### The Overfitted Model (Low CP)
+By setting `cp = 0`, we tell the tree to keep splitting even if the improvement is tiny.
+This results in a model that tracks the noise perfectly but fails on new data.
+
+```{r}
+# Train a model with no restrictions
+overfit_model <- rpart(y ~ x, data = train_df, control = rpart.control(cp = 0, minsplit = 2))
+
+# Predict
+train_df$pred_overfit <- predict(overfit_model, train_df)
+test_df$pred_overfit  <- predict(overfit_model, test_df)
+
+# Calculate RMSE (Root Mean Squared Error)
+rmse_train_over <- sqrt(mean((train_df$y - train_df$pred_overfit)^2))
+rmse_test_over  <- sqrt(mean((test_df$y - test_df$pred_overfit)^2))
+
+print(rmse_train_over)
+print(rmse_test_over)
+```
+### The Tuned Model (Optimal CP)
+Now, we tune the parameter. We can use a higher $cp$ (e.g., 0.05) to prune the tree, ensuring it only captures the general trend (the sine wave) and ignores the noise.
+
+```{r}
+# Train a model with a tuning parameter to prevent overfitting
+tuned_model <- rpart(y ~ x, data = train_df, control = rpart.control(cp = 0.05))
+
+# Predict
+train_df$pred_tuned <- predict(tuned_model, train_df)
+test_df$pred_tuned  <- predict(tuned_model, test_df)
+
+# Calculate RMSE
+rmse_train_tuned <- sqrt(mean((train_df$y - train_df$pred_tuned)^2))
+rmse_test_tuned  <- sqrt(mean((test_df$y - test_df$pred_tuned)^2))
+
+print(rmse_train_tuned)
+print(rmse_test_tuned)
+```
+### Comparison of Results
+Notice how the overfitted model has a near-zero error on training data but performs poorly on test data.
+
+```{r}
+# Visualization
+par(mfrow=c(1,2))
+
+# Plot Overfit
+plot(df$x, df$y, main="Overfitted (cp=0)", col="gray")
+lines(train_df$x[order(train_df$x)], train_df$pred_overfit[order(train_df$x)], col="red", lwd=2)
+
+# Plot Tuned
+plot(df$x, df$y, main="Tuned (cp=0.05)", col="gray")
+lines(train_df$x[order(train_df$x)], train_df$pred_tuned[order(train_df$x)], col="blue", lwd=2)
+```
+
+  
+
+  
+  
