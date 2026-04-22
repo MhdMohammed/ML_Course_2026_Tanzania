@@ -1,0 +1,293 @@
+---
+title: "Feature Selection and Feature Importance"
+author: "Gabriel"
+date: "2026-04-21"
+output: html_document
+---
+
+## What is feature selection?
+*Feature selection* is the process of selecting the most _relevant features_ of a dataset to use when building and training a machine learning (ML) model.
+By reducing the feature space to a selected _subset_, feature selection improves `ML model` performance, reduces noise while lowering its computational demands and makes results easier to understand.
+
+A *feature* refers to an individual measurable property or characteristic of a data point: a specific attribute of the data that helps describe the phenomenon being observed.
+A dataset about housing might have features such as _number of bedrooms_ and _year of construction_. 
+
+Feature selection is part of the feature engineering process, in which data scientists prepare data and curate a feature set for machine learning algorithms. 
+Feature selection is the portion of feature engineering concerned with choosing the features to use for the model.
+
+## The benefits of feature selection
+The feature selection process streamlines a model by identifying the most important, impactful and nonredundant features in the dataset. Reducing the number of features enhances model efficiency and boosts performance. 
+
+The benefits of feature selection include: 
+
+  - *Better model performance*: Irrelevant features weaken model performance. Conversely, choosing the right set of features for a model makes it more accurate, more precise and gives it better recall. 
+
+  - *Reduced overfitting*: Overfitting happens when a model cannot generalize past its training data. Removing redundant features decreases overfitting and makes a model better able to generalize to new data. 
+
+  - *Shorter training times*: By focusing on a smaller subset of features, algorithms take less time to train. 
+
+  - *Lower compute costs*: A smaller dataset made of the best features makes for simpler predictive models that occupy less storage space. Their computational requirements are lower than those of more complex models. 
+
+  - *Greater interpretability*: Explainable ML is focused on creating models that humans can understand. As models grow more complex, it becomes increasingly difficult to interpret their results. 
+
+  - *Smoother implementation*: Simpler, smaller models are easier to work with by developers when building AI apps, such as those used in data visualization. 
+
+  - *Dimensionality reduction*: With more input variables in play, data points grow more distant within the model space. High-dimensional data has more empty space, which makes it more difficult for the machine learning algorithm to identify patterns and make good predictions. 
+
+## Supervised feature selection methods
+Supervised learning feature selection uses the target variable to determine the most important features. 
+Because the data features are already identified, the task is about identifying which input variables most directly affect the target variable. 
+Correlation is the primary criterion when assessing the most important features. 
+
+Supervised feature selection methods include: 
+### Filter methods
+*Filter methods* are a group of feature selection techniques that are solely concerned with the data itself and do not directly consider model performance optimization. 
+Input variables are assessed independently against the target variable to determine which has the highest correlation. 
+Methods that test features one by one are known as univariate feature selection methods. 
+
+Often used as a data preprocessing tool, filter methods are fast and efficient feature selection algorithms that excel at lowering redundancy and removing irrelevant features from the dataset. 
+Various statistical tests are used to score each input variable for correlation. However, other methods are better at predicting model performance. 
+
+Some common filter methods are: 
+
+  - *Information gain*: Measures how important the presence or absence of a feature is in determining the target variable by the degree of entropy reduction. 
+
+  - *Mutual information*: Assesses the dependence between variables by measuring the information obtained about one through the other. 
+
+  - *Chi-square test*: Assesses the relationship between two categorical variables by comparing observed to expected values. 
+
+  - *Fisher’s score*: Uses derivatives to calculate the relative importance of each feature for classifying data. A higher score indicates greater influence. 
+
+  - *Pearson’s correlation coefficient*: Quantifies the relationship between two continuous variables with a score ranging from -1 to 1. 
+
+  - *Variance threshold*: Removes all features that fall under a minimum degree of variance because features with more variances are likely to contain more useful information. A related method is the mean absolute difference (MAD). 
+
+  - *Missing value ratio*: Calculates the percentages of instances in a dataset for which a certain feature is missing or has a null value. If too many instances are missing a feature, it is not likely to be useful. 
+
+  - *Dispersion ratio*: The ratio of variance to the mean value for a feature. Higher dispersion indicates more information. 
+
+  - *ANOVA (analysis of variance)*: Determines whether different feature values affect the value of the target variable.
+
+### Wrapper methods
+*Wrapper methods* train the machine learning algorithm with various subsets of features, adding or removing features and testing the results at each iteration. 
+The goal of all the wrapper methods is to find the feature set that leads to optimal model performance. 
+
+Wrapper methods that test all possible feature combinations are known as greedy algorithms. Their search for the overall best feature set is compute-intensive and time-consuming, and so is best for datasets with smaller feature spaces. 
+
+Wrapper methods include: 
+
+  - *Forward selection*: Starts with an empty feature set and gradually adds new features until the optimal set is found. Model selection takes place when the algorithm’s performance fails to improve after any specific iteration. 
+
+  - *Backward selection*: Trains a model with all the original features and iteratively removes the least important feature from the feature set. 
+
+  - *Exhaustive feature selection*: Tests every possible combination of features to find the overall best one by optimizing a specified performance metric. A logistic regression model that uses exhaustive feature selection tests every possible combination of every possible number of features. 
+
+  - *Recursive feature elimination (RFE)*: A type of backward selection that begins with an initial feature space and eliminates or adds features after each iteration based on their relative importance. 
+
+  - *Recursive feature elimination with cross-validation*: A variation of recursive elimination that uses cross-validation, which tests a model on unseen data, to select the best-performing feature set. 
+
+### Embedded methods
+*Embedded methods* fold—or embed—feature selection into the model training process. As the model undergoes training, it uses various mechanisms to detect underperforming features and discard those from future iterations. 
+
+Many embedded methods revolve around regularization, which penalizes features based on a preset coefficient threshold.
+Models trade a degree of accuracy for greater precision. The result is that models perform slightly less well during training, but become more generalizable by reducing overfitting. 
+
+Embedded methods include: 
+
+  - *LASSO regression (L1 regression)*: Adds a penalty to the loss function for high-value correlated coefficients, moving them toward a value of 0. 
+Coefficients with a value of 0 are removed. The greater the penalization, the more features are removed from the feature space. Effective LASSO use is about balancing the penalty to remove enough irrelevant features while keeping all the important ones. 
+
+  - *Random forest importance*: Builds hundreds of decision trees, each with a random selection of data points and features. Each tree is assessed by how well it divides the data points. The better the results, the more important the feature or features in that tree are considered to be. 
+
+Classifiers measure the *impurity* of the groupings by `Gini` impurity or information gain, while regression models use variance. 
+
+  - *Gradient boosting*: Adds predictors in sequence to an ensemble with each iteration correcting the errors of the previous one. In this way, it can identify which features lead most directly to optimal results.
+
+## Unsupervised feature selection methods
+With unsupervised learning, models figure out data features, patterns and relationships on their own. It’s not possible to tailor input variables to a known target variable. Unsupervised feature selection methods use other techniques to simplify and streamline the feature space. 
+
+One unsupervised feature selection method is *principal component analysis (PCA)*. PCA reduces the dimensionality of large datasets by transforming potentially correlated variables into a smaller set of variables. 
+These principal components retain most of the information contained in the original dataset. PCA counters the curse of dimensionality and also reduces overfitting. 
+
+The type of feature selection used depends on the nature of the input and output variables. These also shape the nature of the machine learning challenge—whether it’s a classification problem or a regression task. 
+
+## What is Feature Importance?
+Feature importance is a technique that determines the contribution of each feature (or variable) in a dataset toward a machine learning model’s predictions. 
+It answers the question: *Which features have the most influence on the model’s predictions?*
+Knowing which features to focus on is the essential component of feature selection. Some features are highly desirable for modeling, while others can lead to subpar results.
+
+### Benefits of Feature Importance
+
+  - *Model Interpretability* — Helps us understand why the model makes certain decisions.
+  
+  - *Feature Selection* — Improves model performance by removing redundant or unimportant features.
+
+  - *Reducing Overfitting* — Eliminates unnecessary features, preventing the model from learning noise.
+  
+  - *Computational Efficiency* — Reducing the number of features speeds up model training.
+  
+  - *Better Data Insights* — Provides valuable business and research insights by highlighting the most relevant factors.
+
+### Methods to Calculate Feature Importance
+Feature importance can be calculated using various techniques, each providing a different perspective on how features contribute to the model’s performance.
+
+ 1️⃣ Decision Tree-Based Feature Importance
+Decision Trees determine feature importance based on how much each feature reduces impurity (e.g., Gini impurity or entropy). The more a feature contributes to splitting data into pure nodes, the higher its importance.
+
+ 2️⃣ Random Forest Feature Importance
+Random Forests, an ensemble of Decision Trees, calculate feature importance by averaging the importance scores from all trees, making the results more robust and less sensitive to noise.
+
+ 3️⃣ Permutation Importance
+Permutation importance assesses a feature’s importance by shuffling its values and measuring how the model’s accuracy changes. If accuracy drops significantly, the feature is important.
+
+ 4️⃣ SHAP (SHapley Additive Explanations)
+ 
+SHAP values provide a game-theoretic approach to explaining model predictions. They quantify how much each feature contributes to individual predictions, making it one of the most reliable interpretability techniques.
+
+
+
+
+## Constructing Variable Importance
+We’ll illustrate major concepts using the Friedman 1 benchmark problem described in Friedman (1991) and Breiman (1996):
+
+$$\begin{equation} Y_i = 10 \sin\left(\pi X_{1i} X_{2i}\right) + 20 \left(X_{3i} - 0.5\right) ^ 2 + 10 X_{4i} + 5 X_{5i} + \epsilon_i, \quad i = 1, 2, \dots, n, \tag{1} \end{equation}$$
+
+where $\epsilon_i \stackrel{iid}{\sim} N\left(0, \sigma^2\right)$. 
+Data from this model can be generated using the `vip::gen_friedman()`. By default, the features consist of 10 independent variables uniformly distributed on the interval $\left[0,1\right]$; however, only 5 out of these 10 are actually used in the true model. The code chunk below simulates 1000 observations from the model in Equation (1) with $\sigma = 1$; 
+The `vip` package compute variable importance scores for the predictors in a model, using `vi()` function for the scores and `vip()` function to visualize the VI scores as bar chart.	
+Additional optional arguments to be passed on to `vi_model`, `vi_firm`, `vi_permute`, or `vi_shap`; see their respective help pages for details.
+
+```{r}
+library(vip)
+sample_trn <- vip::gen_friedman(1000, n_features = 10, sigma = 1, seed = 101)  # simulate training data
+tibble::as_tibble(sample_trn)  # inspect output
+```
+From Equation (1), it should be clear that features $X_1$ to $X_5$ are the most important. (The others don’t influence $Y$ at all.) 
+Also, based on the form of the model, we’d expect $X_4$ to be the most important feature, probably followed by $X_1$ and $X_2$ (both comparably important), with $X_5$ probably being less important. 
+The influence of $X_3$ is harder to determine due to its quadratic nature, but it seems likely that this nonlinearity will suppress the variable’s influence over its observed range (i.e., 0–1).
+
+### Decision trees and tree ensembles
+To illustrate, we fit a CART-like regression tree, RF, and GBM to the simulated training data. 
+(Note: there are a number of different packages available for fitting these types of models, we just picked popular implementations for illustration.)
+
+```{r}
+# Load required packages
+library(rpart)          
+library(randomForest)   
+library(xgboost)        
+
+# Fit a single regression tree
+tree_model <- rpart(y ~ ., data = sample_trn)
+
+# Fit an RF
+set.seed(101)  # for reproducibility
+rf_model <- randomForest(y ~ ., data = sample_trn, importance = TRUE)
+
+# Fit a GBM
+set.seed(102)  # for reproducibility
+xgb_model <- xgboost(
+  data = data.matrix(subset(sample_trn, select = -y)),
+  label = sample_trn$y,
+  objective = "reg:squarederror",
+  nrounds = 100,
+  max_depth = 5,
+  eta = 0.3,
+  verbose = 0  # suppress printing
+)
+```
+
+Each of the above packages include the ability to compute _variable importance_ scores for all the features in the model; however, the implementation is rather package-specific, as shown in the code chunk below.
+
+```{r}
+# Extract VI scores from each model
+vi_tree <- tree_model$variable.importance
+vi_rf <- rf_model$variable.importance  # or use `randomForest::importance(rf_model)`
+vi_xgb <- xgb.importance(model = xgb_model)
+```
+
+As we would expect, all three methods rank the variables $x_1–x_5$ as more important than the others. While this is good news, it is unfortunate that we have to remember the different functions and ways of extracting and plotting *VI scores* from various model fitting functions. 
+This is one place where `vip` can help one function to rule them all! 
+Once `vip` is loaded, we can use `vi()` to extract a tibble of VI scores.
+
+
+```{r}
+vi(tree_model)
+vi(rf_model)
+vi(xgb_model)
+```
+
+Plotting VI scores with `vip()` is just as straightforward. 
+```{r}
+library(patchwork)  # for easily arranging multiple ggplot2 plots
+library(ggplot2)
+p1 <- vip(tree_model) + ggtitle("Single tree")
+p2 <- vip(rf_model) + ggtitle("Random forest")
+p3 <- vip(xgb_model) + ggtitle("Gradient boosting")
+
+# Display plots in a grid (Figure 1)
+p1 + p2 + p3
+```
+
+Notice how the `vip()` function always returns a *ggplot* object (by default, this will be a bar plot).
+
+For large models with many features, a *Cleveland dot plot* is more effective (in fact, a number of useful plotting options can be fiddled with). 
+
+```{r}
+
+library(ggplot2)  # for theme_light() function
+
+vip(xgb_model, num_features = 8, geom = "point", horizontal = FALSE,
+    aesthetics = list(color = "red", shape = 17, size = 5)) +
+  theme_light()
+```
+
+### Linear models
+In multiple linear regression, or linear models (LMs), the absolute value of the $t$-statistic (or some other scaled variant of the estimated coefficients) is commonly used as a measure of variable importance.
+We fit an LM to the simulated Friedman data (sample_trn) allowing for all main effects and two-way interactions, then use the `step()` function to perform backward elimination.
+
+```{r}
+# Fit a LM
+linmod <- lm(y ~ .^2, data = sample_trn)
+backward <- step(linmod, direction = "backward", trace = 0)
+
+# Extract VI scores
+(vi_backward <- vi(backward))
+```
+
+Plot VI scores; by default, `vip()` displays the top ten features
+```{r}
+pal <- palette.colors(2, palette = "Okabe-Ito")  # colorblind friendly palette
+vip(vi_backward, num_features = length(coef(backward)),  # Figure 3
+    geom = "point", horizontal = FALSE, mapping = aes(color = Sign)) +
+  scale_color_manual(values = unname(pal)) +
+  theme_light() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Neural networks
+For neural networks (NNs), two popular methods for constructing VI scores are the _Garson algorithm (Garson 1991)_, later modified by _Goh (1995)_, and the _Olden algorithm (Olden, Joy, and Death 2004)_. 
+For both algorithms, the basis of these VI scores is the network’s connection weights. The Garson algorithm determines VI by identifying all weighted connections between the nodes of interest. Olden’s algorithm, on the other hand, uses the products of the raw connection weights between each input and output neuron and sums these products across all hidden neurons. This has been shown to outperform the Garson method in various simulations. 
+
+```{r}
+# Load required packages
+library(nnet)
+library(NeuralNetTools)
+# Fit a neural network
+set.seed(0803)  # for reproducibility
+nn <- nnet(y ~ ., data = sample_trn, size = 7, decay = 0.1,
+           linout = TRUE, trace = FALSE)
+
+# Construct VIPs
+p1 <- vip(nn, type = "garson")
+p2 <- vip(nn, type = "olden")
+
+# Display plots in a grid 
+p1 + p2
+```
+
+
+
+
+
+
+
